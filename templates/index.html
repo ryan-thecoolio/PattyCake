@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="chatbox" id="chatbox">
+    <!-- Messages will be inserted here -->
+</div>
+<div class="input-area">
+    <input type="text" id="user-input" class="form-control" placeholder="Type your message...">
+    <button id="send-btn" class="btn btn-primary">Send</button>
+</div>
+
+<script>
+    document.getElementById('send-btn').addEventListener('click', function() {
+        const userMessage = document.getElementById('user-input').value;
+        if (userMessage.trim() !== '') {
+            addMessage(userMessage, 'user');
+            document.getElementById('user-input').value = '';
+
+            // Simulate a bot response
+            setTimeout(() => {
+                addMessage('This is a bot response to: ' + userMessage, 'bot');
+            }, 1000);
+        }
+    });
+
+    function addMessage(message, sender) {
+        const chatbox = document.getElementById('chatbox');
+        const messageDiv = document.createElement('div');
+        messageDiv.classList.add('message', sender === 'user' ? 'user-message' : 'bot-message');
+        messageDiv.textContent = message;
+        chatbox.appendChild(messageDiv);
+        chatbox.scrollTop = chatbox.scrollHeight; // Scroll to the bottom
+    }
+</script>
+{% endblock %}
