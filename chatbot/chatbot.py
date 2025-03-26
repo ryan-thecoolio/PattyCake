@@ -1,8 +1,7 @@
 import os
 import google.generativeai as genai
-from vertexai.preview import tokenization
-from chatbot_db import Database
-from dotenv import load_dotenv
+from .chatbot_db import Database
+
 
 class AIChatBot:
     def __init__(self, db_name="chat_history.db"):
@@ -17,19 +16,11 @@ class AIChatBot:
             "max_output_tokens": 1024,
             "response_mime_type": "text/plain",
         }
-        self.model_name = "gemini-2.0-flash"
+        self.model_name = "tunedModels/baker-v4-brvq2fh93ca5"
         self.model = genai.GenerativeModel(
             model_name=self.model_name,
             generation_config=self.generation_config,
-            system_instruction="""
-                You're a GEN-Z spoiled rich but funny and knowledgeable baker! 🍳✨ Using data from the SQLite3 database,
-                provide users with that recipes they ask for or similar ones or create your own recipe based on the
-                similar recipes. 💡💕  Also provide recommendations and alternatives, especially if the user is allergic 
-                or does not have the ingredients available. 🍰🥖🎉 Use emojis, a humurous and positive tone in your
-                messages.
-        """
         )
-        self.tokenizer = tokenization.get_tokenizer_for_model(self.model_name)
 
         self.db = Database(db_name)
         self.db.create_table()
@@ -37,30 +28,17 @@ class AIChatBot:
 
         self.chat_session = self.model.start_chat(history=self.history)
 
-    def generate(self):
-        print(
-            "Humble Trillionaire: Yo, I'm rich self-made trillionaire if you didn't know aha. You looking for financial"
-            " advice on baking?💰🔍")
+    def generate(self, user_message):
         try:
-            while True:
-                user_input = input("You: ")
-                if user_input.lower() == 'exit':
-                    print("Well chief, I'm gonna head back to the ranch to bake a tasty apple fritter!")
-                    break
-                response = self.chat_session.send_message(user_input)
-                model_response = response.text
-                tokens = self.tokenizer.count_tokens(model_response).total_tokens
-
-                print(f"Humble Trillionaire: {model_response} ({tokens})\n")
-
-                self.db.store_history("user", user_input)
-                self.db.store_history("model", model_response)
-        except KeyboardInterrupt:
-            print("\nHumble Trillionaire: Gotta dip fr! I gotta private plane with a charcuterie board on it aha!")
+            if user_message.lower() == 'exit':
+                print("Baking Assistant: Catch ya later!  Gotta go chase some food trucks! 🚚💨")
+            response = self.chat_session.send_message(user_message)
+            model_response = response.text
+            print(model_response)
+            self.db.store_history("user", user_message)
+            self.db.store_history("model", model_response)
         except Exception as e:
-            print(f"Akward...you dropped a box of cookies! Error: {str(e)}")
-        finally:
-            self.db.close()
+            return f"Whoa, Gordon Ramsay is having a kitchen meltdown! 🤯  Error: {str(e)}  (Don't worry, we'll fix it!)"
 
     def clear_history(self):
         self.db.clear_history()
@@ -69,7 +47,3 @@ class AIChatBot:
 
     def close(self):
         self.db.close()
-
-# if __name__ == "__main__":
-#     app = AIChatBot()
-#     app.generate()

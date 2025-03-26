@@ -54,7 +54,7 @@ ROBOTSTXT_OBEY = True
 # Configure a delay for requests for the same website (default: 0)
 # See https://docs.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-DOWNLOAD_DELAY = 3
+DOWNLOAD_DELAY = 9
 # The download delay setting will honor only one of:
 # CONCURRENT_REQUESTS_PER_DOMAIN = 16
 # CONCURRENT_REQUESTS_PER_IP = 16
@@ -76,7 +76,7 @@ DOWNLOADER_MIDDLEWARES = {
     'rotating_proxies.middlewares.BanDetectionMiddleware': 620,
 }
 
-ROTATING_PROXY_LIST_PATH = 'proxies.txt'
+ROTATING_PROXY_LIST_PATH = r"C:\Users\mayma\PycharmProjects\BakingAdvisor\bakerscraper\bakerscraper\proxies.txt"
 
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
@@ -95,7 +95,7 @@ ROTATING_PROXY_LIST_PATH = 'proxies.txt'
 # EXTENSIONS = {
 #    "scrapy.extensions.telnet.TelnetConsole": None,
 # }
-
+#
 # ITEM_PIPELINES = {
 #    "bakerscraper.pipelines.BakerscraperPipeline": 300,
 # }

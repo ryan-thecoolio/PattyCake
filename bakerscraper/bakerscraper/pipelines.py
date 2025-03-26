@@ -12,7 +12,7 @@ from datetime import datetime
 
 
 class BakerscraperPipeline:
-    def __init__(self, db_name="bakerscraper.db"):
+    def __init__(self, db_name="recipes.db"):
         self.db_name = db_name
         self.conn = None
 
@@ -20,7 +20,7 @@ class BakerscraperPipeline:
         self.conn = sqlite3.connect(self.db_name)
         cursor = self.conn.cursor()
         cursor.execute("""
-            CREATE TABLE IF NOT EXISTS bakerscraper (
+            CREATE TABLE IF NOT EXISTS recipes (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL,
             image_url TEXT NOT NULL,
@@ -40,7 +40,7 @@ class BakerscraperPipeline:
     def process_item(self, item, spider):
         cursor = self.conn.cursor()
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        cursor.execute("""INSERT INTO bakerscraper
+        cursor.execute("""INSERT INTO recipes
                       (name, image_url, ingredients, instructions, notes, reviews, timestamp)
                       VALUES (?, ?, ?, ?, ?, ?, ?)""",
                        (item["name"], item["image"], item["ingredients"], item["instructions"],

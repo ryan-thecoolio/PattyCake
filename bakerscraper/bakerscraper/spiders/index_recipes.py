@@ -21,3 +21,4 @@ class IndexRecipesSpider(scrapy.Spider):
         next_page = response.css("div a.next.page-numbers::attr(href)").get()
         if response.css("div a.next.page-numbers").get():
             yield response.follow(next_page, callback=self.parse)
+
