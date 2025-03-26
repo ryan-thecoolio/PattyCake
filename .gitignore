@@ -1,4 +1,7 @@
 .env
 venv/
 idea/
+<<<<<<< HEAD
 bakerscraper/bakerscraper/proxies.txt
+=======
+>>>>>>> 7022bd2186422d27ec1b3f39d624ba540b638771
